@@ -10,15 +10,6 @@ class SendGestures:
         self.firebase = firebase.FirebaseApplication("https://benz.firebaseio.com/",None)
         self.user_name = "leap_data"
 
-
-        new_activity = {
-            "user": "Ustun",
-            "action_type": "asked",
-            "text": "a text questions",
-            "url": "a url"
-        }
-
-
         #result = self.firebase.post("/activities", new_activity)
         data = {'swipe_right': True, 
                 'swipe_left' : False,
@@ -27,20 +18,14 @@ class SendGestures:
                 'zoom_in' : False,
                 'zoom_out': False,
                 'tap': False,
-                }
 
         #snapshot = self.firebase.post('/activity', data)
-        snapshot = self.firebase.put('/leapdata',"gesture_info" ,data)
+        snapshot = self.firebase.put('/leapdata', "gesture" ,data)
         #print(snapshot['name'])
 
         #print "result is ", result
         IPython.embed()
         #self.get_gesture_loop()
-
-
-
-
-
 
     def init_controller_settings(self):
         self.controller = Leap.Controller()
@@ -62,7 +47,6 @@ class SendGestures:
         hdlr.setFormatter(formatter)
         self.log.addHandler(hdlr) 
         self.log.setLevel(logging.INFO)
-
 
     def get_gesture_loop(self):
         self.log.info("started gesture loop")
