@@ -2,7 +2,6 @@ package com.benz.dashboard;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -29,8 +28,6 @@ public class FireBaseService extends IntentService {
 	public FireBaseService() {
 		super("FireBaseService");
 	}
-
-	private Timer mBackGroundTimer = new Timer();
 
 	@Override
 	public void onCreate() {
