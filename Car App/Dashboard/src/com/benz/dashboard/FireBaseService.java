@@ -20,11 +20,7 @@ import com.firebase.client.FirebaseError;
 
 public class FireBaseService extends IntentService {
 
-<<<<<<< HEAD
-	private final Map<String, BaseHandler> handlers = new HashMap<>();
-=======
 	private final Map<String, BaseHandler> handlers = new HashMap<String, BaseHandler>();
->>>>>>> 52cdfa361d2afec06227b7a2867c88e1492c0feb
 
 	public FireBaseService(String name) {
 		super("FireBaseService");
