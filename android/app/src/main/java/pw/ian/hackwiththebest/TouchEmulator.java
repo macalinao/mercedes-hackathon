@@ -22,6 +22,10 @@ public class TouchEmulator {
         sendCommand("tap " + x + " " + y);
     }
 
+    public static void sendText(String text) {
+        sendCommand("text \"" + text + "\"");
+    }
+
     /**
      * Sends an input related command.
      *
