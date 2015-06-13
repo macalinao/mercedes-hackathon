@@ -1,7 +1,5 @@
 package com.benz.dashboard;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Timer;
 
@@ -53,18 +51,18 @@ public class FireBaseService extends IntentService {
 			public void onChildChanged(DataSnapshot snapshot, String arg1) {
 				Log.e("new onChildChanged", snapshot.getValue().toString());
 
-        String key = snapshot.getKey();
-        switch (key) {
-          case "Map":
-            CallMap(snapshot);
-            break;
-          case "Web":
-            CallWeb(snapshot);
-            break;
-          case "Touch":
-            touchEvent(snapshot);
-            break;
-        }
+				String key = snapshot.getKey();
+				switch (key) {
+				case "Map":
+					CallMap(snapshot);
+					break;
+				case "Web":
+					CallWeb(snapshot);
+					break;
+				case "Touch":
+					touchEvent(snapshot);
+					break;
+				}
 
 			}
 
@@ -142,6 +140,6 @@ public class FireBaseService extends IntentService {
 		int Xinput = Integer.parseInt(newPost.get("Xinput"));
 		int Yinput = Integer.parseInt(newPost.get("Yinput"));
 
-    AirTouchEmulator.tap(Xinput, Yinput);
+		AirTouchEmulator.tap(Xinput, Yinput);
 	}
 }
