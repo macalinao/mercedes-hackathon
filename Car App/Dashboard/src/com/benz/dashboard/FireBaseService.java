@@ -1,5 +1,6 @@
 package com.benz.dashboard;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 
@@ -7,15 +8,20 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.util.Log;
 
+import com.benz.dashboard.handlers.BaseHandler;
+import com.benz.dashboard.handlers.MapHandler;
+import com.benz.dashboard.handlers.TouchHandler;
+import com.benz.dashboard.handlers.WebHandler;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
 public class FireBaseService extends IntentService {
+	
+	private final Map<String, BaseHandler> handlers = new HashMap<>();
 
 	public FireBaseService(String name) {
 		super("FireBaseService");
@@ -29,8 +35,11 @@ public class FireBaseService extends IntentService {
 
 	@Override
 	public void onCreate() {
-
 		super.onCreate();
+
+		handlers.put("map", new MapHandler(this));
+		handlers.put("touch", new TouchHandler(this));
+		handlers.put("web", new WebHandler(this));
 
 		Log.e("Create", "Create");
 
@@ -50,20 +59,12 @@ public class FireBaseService extends IntentService {
 			@Override
 			public void onChildChanged(DataSnapshot snapshot, String arg1) {
 				Log.e("new onChildChanged", snapshot.getValue().toString());
-
-				String key = snapshot.getKey();
-				switch (key) {
-				case "Map":
-					CallMap(snapshot);
-					break;
-				case "Web":
-					CallWeb(snapshot);
-					break;
-				case "Touch":
-					touchEvent(snapshot);
-					break;
+				String key = snapshot.getKey().toLowerCase();
+				BaseHandler handler = handlers.get(key);
+				if (handler == null) {
+					return;
 				}
-
+				handler.handleSnapshot(snapshot);
 			}
 
 			@Override
@@ -77,53 +78,10 @@ public class FireBaseService extends IntentService {
 
 	}
 
-	@Override
-	protected void onHandleIntent(Intent workIntent) {
-		// Gets data from the incoming Intent
-		// String dataString = workIntent.getDataString();
-
-	}
-
-	private void CallMap(DataSnapshot snapshot) {
-		Map<String, Object> newPost = (Map<String, Object>) snapshot.getValue();
-		Log.e("new map", newPost.toString());
-
-		Uri geoLocation = Uri.parse("geo:" + newPost.get("log") + ","
-				+ newPost.get("lat") + "?q=" + newPost.get("log") + ","
-				+ newPost.get("lat") + "( " + newPost.get("label") + " )");
-		showMap(geoLocation);
-	}
-
-	private void CallWeb(DataSnapshot snapshot) {
-		Map<String, Object> newPost = (Map<String, Object>) snapshot.getValue();
-		Log.e("new website", newPost.toString());
-		if (newPost.get("url") != null)
-			openWebPage(newPost.get("url").toString());
-	}
-
-	public void showMap(Uri geoLocation) {
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.setData(geoLocation);
-		if (intent.resolveActivity(getPackageManager()) != null) {
-			startActivity(intent);
-		}
-	}
-
-	public void openWebPage(String url) {
-		Uri webpage = Uri.parse(url);
-		Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		if (intent.resolveActivity(getPackageManager()) != null) {
-			startActivity(intent);
-		}
-	}
-
 	public void changeVolume(int streamType, int direction) {
 		AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		audio.adjustStreamVolume(streamType, direction,
 				AudioManager.FLAG_ALLOW_RINGER_MODES);
-
 	}
 
 	@Override
@@ -131,15 +89,5 @@ public class FireBaseService extends IntentService {
 		// We want this service to continue running until it is explicitly
 		// stopped, so return sticky.
 		return START_STICKY;
-	}
-
-	public void touchEvent(DataSnapshot snapshot) {
-		Map<String, String> newPost = (Map<String, String>) snapshot.getValue();
-		Log.e("Touch", newPost.get("Xinput"));
-
-		int Xinput = Integer.parseInt(newPost.get("Xinput"));
-		int Yinput = Integer.parseInt(newPost.get("Yinput"));
-
-		AirTouchEmulator.tap(Xinput, Yinput);
 	}
 }
