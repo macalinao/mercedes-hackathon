@@ -4,9 +4,8 @@ import Leap, time, logging ,IPython
 from firebase import firebase
 
 class SendGestures:
-
-
     def __init__(self):
+        """Class initializer"""
         self.init_logger()
         self.init_variables()
         self.init_controller_settings()
@@ -15,14 +14,16 @@ class SendGestures:
     def init_variables(self):
         """All variables we'd be using in the class"""
 
-        self.firebase = firebase.FirebaseApplication("https://benz.firebaseio.com/",None)
-
+        try:
+            self.firebase = firebase.FirebaseApplication("https://benz.firebaseio.com/",None)
+        except:
+            self.log.error("Firebase connection error!!")
+            quit()
         self.finger_names = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky']
         self.zoom_flag = False
         self.zoom_origin = 0
         
     def init_controller_settings(self):
-
         """seeting and config required on the controller for our purpose"""
         self.controller = Leap.Controller()
 
@@ -45,10 +46,10 @@ class SendGestures:
 
     def get_gesture_loop(self):
         self.log.info("started gesture loop")
-        count = 0
-        data_previous = None
-        while True:
+        count = 0   #we send all false data once every second to make sure that we dont get stuck
+        data_previous = None  #used to compare the difference between iterations
 
+        while True:
             count = count+1
             self.gesture_data = {'swipe_right': False,'swipe_left' : False,
                                  'rotate_clockwise': False,'rotate_counterclockwise' : False,
@@ -84,7 +85,7 @@ class SendGestures:
             for h in hand_list:
                 if not h.is_left:
                     hand = h
-                    right_hand_exist = True
+                    right_hand_exist = True 
             if right_hand_exist:
                 finger_list = hand.fingers.extended()
                 # Check if the zoom gesture exists in the current frame
@@ -108,23 +109,29 @@ class SendGestures:
                 if hand.pinch_strength == 1:
                     self.gesture_data['pinch'] = True
 
+            elif len(hand_list) !=0:
+                self.log.warn('Not the right hand!')
+            
+            self.log.info("before logic data:" +  str(self.gesture_data))
+
             if data_previous == self.gesture_data:
                 if (self.gesture_data['zoom_in'] or self.gesture_data['zoom_out'] or self.gesture_data['rotate_clockwise'] or self.gesture_data['rotate_counterclockwise']):
                     #snapshot = self.firebase.put('/Datafrompc','leapdata' ,self.gesture_data)
-                    print self.gesture_data
+                    self.log.info('Aafter logic data:'+str(self.gesture_data))
                 else:
                     pass
             else:
                 #snapshot = self.firebase.put('/Datafrompc','leapdata' ,self.gesture_data)
-                print self.gesture_data
+                self.log.info('Aafter logic data:' +str(self.gesture_data))
             if count%10 ==0:        
                 #snapshot = self.firebase.put('/Datafrompc','leapdata' ,data_all_false)
-                print data_all_false
+                self.log.info('Aafter logic data'+ str(data_all_false))
                 count = 0 
-
             data_previous =  self.gesture_data
-
             time.sleep(0.1)
+            if not self.controller.is_connected:
+                break
+        self.log.error("Frame is no longer Valid")
 
 if __name__=="__main__":
     gesture = SendGestures()
