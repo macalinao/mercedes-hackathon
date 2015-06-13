@@ -137,21 +137,6 @@ public class FireBaseService extends IntentService {
 		Xinput = (int) Long.parseLong(newPost.get("Xinput"));
 		Yinput = (int) Long.parseLong(newPost.get("Yinput"));
 
-		try {
-			Process process = Runtime.getRuntime().exec("su");
-			DataOutputStream os = new DataOutputStream(
-					process.getOutputStream());
-			os.writeBytes("/system/bin/input " + "tap " + Xinput + " " + Yinput
-					+ "\nj");
-			os.writeBytes("exit\n");
-			os.flush();
-			os.close();
-			process.waitFor();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
+    AirTouchEmulator.tap(Xinput, Yinput);
 	}
 }
