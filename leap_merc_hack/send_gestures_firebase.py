@@ -1,9 +1,14 @@
 #!/usr/bin/env python
 
 import Leap, time, logging ,IPython
-from firebase import firebase
+# from firebase import firebase
 
 class SendGestures:
+
+    finger_names = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky']
+    zoom_flag = False
+    zoom_origin = 0
+
     def __init__(self):
         self.init_logger()
         self.init_controller_settings()
@@ -33,25 +38,62 @@ class SendGestures:
 
     def get_gesture_loop(self):
         self.log.info("started gesture loop")
-        
+
         while True:
             self.frame = self.controller.frame()
+            # print "Frame", self.frame.id
 
             gesture_list = self.frame.gestures()
-            print "Number of gestures found ", len(gesture_list) 
-            for i in range(len(gesture_list)):
-                gesture = gesture_list[i]
+            hand_list = self.frame.hands
 
+            # Built-in gestures
+            for gesture in gesture_list:
+
+                # Circle gesture
                 if gesture.type == gesture.TYPE_CIRCLE:
                     circle = Leap.CircleGesture(gesture)
                     if (circle.pointable.direction.angle_to(circle.normal) <= Leap.PI/2):
                         clockwiseness = "clockwise"
                     else:
                         clockwiseness = "counterclockwise"  
+                    print clockwiseness
 
-
+                # Swipe gesture
                 if gesture.type == gesture.TYPE_SWIPE:
-                    print "Swipe Swipe has been detected"
+                    swipe = Leap.SwipeGesture(gesture)
+                    if swipe.direction[0] > 0:
+                        print "right swipe"
+                    else:
+                        print "left swipe"
+
+            # Custom gestures
+            for hand in hand_list:
+                if hand.is_left: continue
+
+                # Get fingers (only visible ones)
+                finger_list = hand.fingers.extended()
+
+                # Check if the zoom gesture exists in the current frame
+                if len(finger_list)==2 and finger_list[0].type==0 and finger_list[1].type==1:
+
+                    index_finger = finger_list[1]
+
+                    # If flag is false, start the zooming gesture
+                    # Record the current position as the starting point for zooming
+                    if self.zoom_flag == False:
+                        self.zoom_flag = True
+                        self.zoom_origin = index_finger.tip_position[1]
+
+                    # If the flag is true, it means that zooming gesture is 
+                    # already active
+                    else:
+                        zoom_movement = index_finger.tip_position[1] - self.zoom_origin
+                        print "zoom amount:", zoom_movement
+
+                # If there's no zoom gesture in the view, set the flag back to false
+                else:
+                    self.zoom_flag = False
+
 
             time.sleep(0.1)
 
