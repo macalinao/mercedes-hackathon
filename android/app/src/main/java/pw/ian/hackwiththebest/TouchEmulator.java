@@ -7,7 +7,13 @@ import java.io.IOException;
  * Created by ian on 6/13/15.
  */
 public class TouchEmulator {
-    private void sendCommand(String cmd) {
+
+    /**
+     * Sends an input related command.
+     *
+     * @param cmd
+     */
+    private static void sendCommand(String cmd) {
         try {
             Process process = Runtime.getRuntime().exec("su");
             DataOutputStream os = new DataOutputStream(process.getOutputStream());
