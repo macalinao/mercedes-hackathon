@@ -17,6 +17,10 @@ public class AirTouchEmulator {
         }
     }
 
+    public static void tap(int x, int y) {
+        sendCommand("tap(%d, %d, 100)", x, y);
+    }
+
     public static void zoomInCentered(int magnitude, int duration) {
         int ax0 = CENTER_X - 50;
         int ay0 = CENTER_Y - 50;
