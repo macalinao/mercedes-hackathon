@@ -8,7 +8,7 @@ import com.firebase.client.DataSnapshot;
 
 public class VolumeHandler extends BaseHandler {
 
-	protected VolumeHandler(FireBaseService svc) {
+	public VolumeHandler(FireBaseService svc) {
 		super(svc);
 	}
 
