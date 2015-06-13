@@ -52,13 +52,19 @@ public class FireBaseService extends IntentService {
 			@Override
 			public void onChildChanged(DataSnapshot snapshot, String arg1) {
 				Log.e("new onChildChanged", snapshot.getValue().toString());
-				if (snapshot.getKey().toString().contains("Map")) {
-					CallMap(snapshot);
-				} else if (snapshot.getKey().toString().contains("Web")) {
-					CallWeb(snapshot);
-				} else if (snapshot.getKey().toString().contains("Touch")) {
-					touchEvent(snapshot);
-				}
+
+        String key = snapshot.getKey();
+        switch (key) {
+          case "Map":
+            CallMap(snapshot);
+            break;
+          case "Web":
+            CallWeb(snapshot);
+            break;
+          case "Touch":
+            touchEvent(snapshot);
+            break;
+        }
 
 			}
 
