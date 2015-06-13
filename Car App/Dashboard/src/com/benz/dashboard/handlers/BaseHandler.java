@@ -10,5 +10,5 @@ public abstract class BaseHandler {
 		this.svc = svc;
 	}
 
-	public abstract void handleSnapshot(DataSnapshot ds);
+	public abstract void handleSnapshot(DataSnapshot snapshot);
 }
