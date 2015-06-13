@@ -1,0 +1,3 @@
+[submodule "android/setup/airinput"]
+	path = android/setup/airinput
+	url = git@github.com:NetEase/airinput.git
