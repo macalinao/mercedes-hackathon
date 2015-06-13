@@ -11,7 +11,14 @@ import java.io.IOException;
  * https://android.googlesource.com/platform/frameworks/base/+/HEAD/cmds/input/src/com/android/commands/input/Input.java
  */
 public class TouchEmulator {
+    /**
+     * Sends a tap at the given location.
+     *
+     * @param x
+     * @param y
+     */
     public static void sendTap(int x, int y) {
+        if (x < 0 || y < 0) return;
         sendCommand("tap " + x + " " + y);
     }
 
