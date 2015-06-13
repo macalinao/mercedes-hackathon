@@ -12,24 +12,21 @@ class SendGestures:
     def __init__(self):
         self.init_logger()
         self.init_controller_settings()
-
         self.firebase = firebase.FirebaseApplication("https://benz.firebaseio.com/",None)
-        self.user_name = 'gesture'
 
-        data = {'swipe_right': True, 
-                'swipe_left' : False,
-                'rotate_clockwise': False,
-                'rotate_counterclockwise' : False,
-                'zoom_in' : False,
-                'zoom_out': False,
-                'tap': False,
-                }
+        self.gesture_data = {'swipe_right': False, 
+                             'swipe_left' : False,
+                             'rotate_clockwise': False,
+                             'rotate_counterclockwise' : False,
+                             'zoom_in' : False,
+                             'zoom_out': False,
+                             'pinch_twice': False,
+                            }
 
-        snapshot = self.firebase.put('/leapdata',self.user_name ,data)
-        print "should have sent the snapshot"
-        #self.get_gesture_loop()
+        self.get_gesture_loop()
 
     def init_controller_settings(self):
+        """seeting and config required on the controller for our purpose"""
         self.controller = Leap.Controller()
 
         self.controller.enable_gesture(Leap.Gesture.TYPE_CIRCLE)
@@ -109,6 +106,7 @@ class SendGestures:
                 else:
                     self.zoom_flag = False
 
+            snapshot = self.firebase.put('/DatafromPC','leapgesture' ,data)
 
             time.sleep(0.1)
 
