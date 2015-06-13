@@ -20,7 +20,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
 public class FireBaseService extends IntentService {
-	
+
 	private final Map<String, BaseHandler> handlers = new HashMap<>();
 
 	public FireBaseService(String name) {
@@ -89,5 +89,11 @@ public class FireBaseService extends IntentService {
 		// We want this service to continue running until it is explicitly
 		// stopped, so return sticky.
 		return START_STICKY;
+	}
+
+	@Override
+	protected void onHandleIntent(Intent intent) {
+		// TODO Auto-generated method stub
+
 	}
 }
