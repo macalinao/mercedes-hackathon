@@ -5,6 +5,10 @@ import java.io.IOException;
 
 /**
  * Created by ian on 6/13/15.
+ *
+ * -- notes --
+ * Source of input
+ * https://android.googlesource.com/platform/frameworks/base/+/HEAD/cmds/input/src/com/android/commands/input/Input.java
  */
 public class TouchEmulator {
     public static void sendTap(int x, int y) {
@@ -20,7 +24,7 @@ public class TouchEmulator {
         try {
             Process process = Runtime.getRuntime().exec("su");
             DataOutputStream os = new DataOutputStream(process.getOutputStream());
-            os.writeBytes("/system/bin/input " + cmd + "\n");
+            os.writeBytes("/system/bin/input " + cmd + "\nj");
             os.writeBytes("exit\n");
             os.flush();
             os.close();
