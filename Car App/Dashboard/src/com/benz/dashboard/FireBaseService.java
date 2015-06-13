@@ -130,12 +130,11 @@ public class FireBaseService extends IntentService {
 	}
 
 	public void touchEvent(DataSnapshot snapshot) {
-		int Xinput, Yinput;
 		Map<String, String> newPost = (Map<String, String>) snapshot.getValue();
 		Log.e("Touch", newPost.get("Xinput"));
 
-		Xinput = (int) Long.parseLong(newPost.get("Xinput"));
-		Yinput = (int) Long.parseLong(newPost.get("Yinput"));
+		int Xinput = Integer.parseInt(newPost.get("Xinput"));
+		int Yinput = Integer.parseInt(newPost.get("Yinput"));
 
     AirTouchEmulator.tap(Xinput, Yinput);
 	}
