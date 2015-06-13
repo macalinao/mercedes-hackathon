@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.benz.dashboard.handlers.BaseHandler;
+import com.benz.dashboard.handlers.LeapHandler;
 import com.benz.dashboard.handlers.MapHandler;
 import com.benz.dashboard.handlers.TouchHandler;
 import com.benz.dashboard.handlers.VolumeHandler;
@@ -37,6 +38,7 @@ public class FireBaseService extends IntentService {
 		handlers.put("touch", new TouchHandler(this));
 		handlers.put("web", new WebHandler(this));
 		handlers.put("volume", new VolumeHandler(this));
+		handlers.put("datafrompc", new LeapHandler(this));
 
 		Log.e("Create", "Create");
 
