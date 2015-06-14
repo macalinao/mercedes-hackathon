@@ -14,7 +14,7 @@ data.pushSafe = function(e) {
 
 setInterval(function() {
   request.get('http://172.31.99.2/vehicle').then((res) => {
-    data.pushSafe(res);
+    data.pushSafe(res.body);
   });
 }, 100);
 
