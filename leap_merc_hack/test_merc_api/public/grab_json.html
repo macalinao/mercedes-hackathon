@@ -4,19 +4,19 @@
     <title>Example</title>
   </head>
   <body>
-    <div id="chartContainer" style="height: 300px; width:100%;">
+    <div id='chartContainer' style='height: 300px; width:100%;'>
     </div>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script type='text/javascript' src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
+    <script type='text/javascript' src='http://canvasjs.com/assets/script/canvasjs.min.js'></script>
     <script>
       $(function() {
         var dps = []; // dataPoints
-        var chart = new CanvasJS.Chart("chartContainer", {
+        var chart = new CanvasJS.Chart('chartContainer', {
           title: {
-            text: "Data"
+            text: 'Data'
           },
           data: [{
-            type: "line",
+            type: 'line',
             dataPoints: dps
           }]
         });
@@ -45,7 +45,6 @@
           chart.render();
         };
 
-
         // generates first set of dataPoints
         // updateChart(dataLength);
 
@@ -54,35 +53,41 @@
 
         var counter = 0;
 
+        // populate
+        $.get('/data').done(function(data) {
+          for (var i = 0; i < data.length; i++) {
+            pushData(data[i]);
+          }
+          chart.render();
+        });
+
+        function pushData(point) {
+          dps.push({
+            x: counter++,
+            y: point.Accelerator_Pedal
+          });
+          if (dps.length > dataLength) {
+            dps.shift();
+          }
+        }
+
         (function poll() {
-
-
           $.ajax({
-            url: "http://172.31.99.2/vehicle",
-            type: "GET",
+            url: '/latest',
+            type: 'GET',
             success: function(data) {
-              // do something here
-              var jsonString = JSON.stringify(data, undefined, 4);
-              console.log(data);
-              dps.push({
-                x: counter++,
-                y: data.Accelerator_Pedal
-              });
-              if (dps.length > dataLength) {
-                dps.shift();
-              }
+              pushData(data);
               chart.render();
             },
-            dataType: "json",
+            dataType: 'json',
             crossDomain: true,
             complete: setTimeout(function() {
-
               poll();
             }, 200),
             timeout: 200
           });
-
         })();
+
       });
     </script>
   </body>
