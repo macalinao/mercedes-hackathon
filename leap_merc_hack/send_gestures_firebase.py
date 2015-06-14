@@ -52,7 +52,7 @@ class SendGestures:
         while True:
             count = count+1
             self.gesture_data = {'swipe_right': False,'swipe_left' : False,
-                                 'zoom_in' : {'Boolean': False,'Dist': 0} , 'zoom_out': {'Boolean':False, 'Dist': 0},'pinch': False, 'timestamp' : time.asctime() , 
+                                 'zoom_in' : {'Boolean': False,'Dist': 0} , 'zoom_out': {'Boolean':False, 'Dist': 0},'pinch': False, 'timestamp' : time.asctime() , 'swipe_real_left' : False , 'swipe_real_right' : False,
                                 }
             data_all_false = self.gesture_data
             self.frame = self.controller.frame()
@@ -66,19 +66,19 @@ class SendGestures:
                     if right_hand_exist and len(hand.fingers.extended()) == 1:
                         circle = Leap.CircleGesture(gesture)
                         if (circle.pointable.direction.angle_to(circle.normal) <= Leap.PI/2):
-                            self.gesture_data['rotate_clockwise'] = True
+                            self.gesture_data['swipe_left'] = True
                             clockwiseness = "clockwise"
                         else:
                             clockwiseness = "counterclockwise"  
-                            self.gesture_data['rotate_counterclockwise'] = True
+                            self.gesture_data['swipe_right'] = True
 
                 # Swipe gesture
                 if gesture.type == gesture.TYPE_SWIPE:
                     swipe = Leap.SwipeGesture(gesture)
                     if swipe.direction[0] > 0:
-                        self.gesture_data['swipe_right'] = True
+                        self.gesture_data['swipe_real_right'] = True
                     else:
-                        self.gesture_data['swipe_left'] = True
+                        self.gesture_data['swipe_real_left'] = True
             # Custom gestures
             right_hand_exist = False
             for h in hand_list:
