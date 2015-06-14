@@ -50,4 +50,11 @@ public class MainActivity extends Activity {
 		return false;
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		BrightNess.getInstance(this).setSystemBrightness(-1);
+	}
+
 }
