@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.benz.dashboard.FireBaseService;
+import com.benz.dashboard.BrightNess;
 import com.firebase.client.DataSnapshot;
 
 public class WebHandler extends BaseHandler {
@@ -29,6 +30,10 @@ public class WebHandler extends BaseHandler {
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		if (intent.resolveActivity(svc.getPackageManager()) != null) {
 			svc.startActivity(intent);
+		}
+		if (url.contains("youtubu")) {
+			BrightNess instance = BrightNess.getInstance(svc);
+			instance.setSystemBrightness(BrightNess.BLACK_SCREEN);
 		}
 	}
 
