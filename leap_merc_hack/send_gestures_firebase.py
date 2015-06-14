@@ -53,7 +53,7 @@ class SendGestures:
             count = count+1
             self.gesture_data = {'swipe_right': False,'swipe_left' : False,
                                  'rotate_clockwise': False,'rotate_counterclockwise' : False,
-                                 'zoom_in' : False, 'zoom_out': False,'pinch': False,
+                                 'zoom_in' : {'Boolean': False,'Dist': 0} , 'zoom_out': {'Boolean':False, 'Dist': 0},'pinch': False,
                                 }
             data_all_false = self.gesture_data
             self.frame = self.controller.frame()
@@ -99,9 +99,11 @@ class SendGestures:
                     else:
                         zoom_movement = hand.palm_position[1] - self.zoom_origin
                         if zoom_movement > 60:  
-                            self.gesture_data['zoom_out'] = True
+                            self.gesture_data['zoom_out']['Boolean'] = True
+                            self.gesture_data['zoom_out']['Dist'] = abs(zoom_movement)
                         if zoom_movement < -60: 
-                            self.gesture_data['zoom_in'] = True
+                            self.gesture_data['zoom_in']['Boolean'] = True
+                            self.gesture_data['zoom_in']['Dist'] = abs(zoom_movement)
 
                 # If there's no zoom gesture in the view, set the flag back to false
                 else:
@@ -115,16 +117,16 @@ class SendGestures:
             self.log.info("before logic data:" +  str(self.gesture_data))
 
             if data_previous == self.gesture_data:
-                if (self.gesture_data['zoom_in'] or self.gesture_data['zoom_out'] or self.gesture_data['rotate_clockwise'] or self.gesture_data['rotate_counterclockwise']):
-                    #snapshot = self.firebase.put('/Datafrompc','leapdata' ,self.gesture_data)
+                if (self.gesture_data['zoom_in']['Boolean'] or self.gesture_data['zoom_out']['Boolean'] or self.gesture_data['rotate_clockwise'] or self.gesture_data['rotate_counterclockwise']):
+                    snapshot = self.firebase.put('/Datafrompc','leapdata' ,self.gesture_data)
                     self.log.info('Aafter logic data:'+str(self.gesture_data))
                 else:
                     pass
             else:
-                #snapshot = self.firebase.put('/Datafrompc','leapdata' ,self.gesture_data)
+                snapshot = self.firebase.put('/Datafrompc','leapdata' ,self.gesture_data)
                 self.log.info('Aafter logic data:' +str(self.gesture_data))
             if count%10 ==0:        
-                #snapshot = self.firebase.put('/Datafrompc','leapdata' ,data_all_false)
+                snapshot = self.firebase.put('/Datafrompc','leapdata' ,data_all_false)
                 self.log.info('Aafter logic data'+ str(data_all_false))
                 count = 0 
             data_previous =  self.gesture_data
