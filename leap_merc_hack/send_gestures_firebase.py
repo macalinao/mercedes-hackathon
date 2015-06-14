@@ -125,12 +125,12 @@ class SendGestures:
             else:
                 snapshot = self.firebase.put('/Datafrompc','leapdata' ,self.gesture_data)
                 self.log.info('Aafter logic data:' +str(self.gesture_data))
-            if count%10 ==0:        
+            if count%20 ==0:        
                 snapshot = self.firebase.put('/Datafrompc','leapdata' ,data_all_false)
                 self.log.info('Aafter logic data'+ str(data_all_false))
                 count = 0 
             data_previous =  self.gesture_data
-            time.sleep(0.1)
+            time.sleep(0.05)
             if not self.controller.is_connected:
                 break
         self.log.error("Frame is no longer Valid")
