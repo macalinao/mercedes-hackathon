@@ -16,9 +16,8 @@ public class LeapHandler extends BaseHandler {
 
 	public static final int DELAY = 150;
 
-	protected LeapHandler(FireBaseService svc) {
+	public LeapHandler(FireBaseService svc) {
 		super(svc);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
