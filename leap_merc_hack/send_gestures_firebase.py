@@ -99,7 +99,7 @@ class SendGestures:
                 # If there's no zoom gesture in the view, set the flag back to false
                 else:
                     self.zoom_flag = False
-                if hand.pinch_strength == 1:
+                if ((hand.pinch_strength == 1) and  ((self.gesture_data['swipe_real_right'] == True) or (self.gesture_data['swipe_real_left'] == True))):
                     self.gesture_data['pinch'] = True
 
             elif len(hand_list) !=0:
