@@ -12,9 +12,9 @@ public class LeapHandler extends BaseHandler {
 	 */
 	private long lastTime = System.currentTimeMillis();
 
-	public static final int DURATION = 1500;
+	public static final int DURATION = 500;
 
-	public static final int DELAY = 1700;
+	public static final int DELAY = 600;
 
 	public LeapHandler(FireBaseService svc) {
 		super(svc);
@@ -33,17 +33,17 @@ public class LeapHandler extends BaseHandler {
 		boolean pinch = (Boolean) map.get("pinch");
 		// boolean rotateCw = (Boolean) map.get("rotate_clockwise");
 		// boolean rotateCcw = (Boolean) map.get("rotate_counterclockwise");
-		boolean zoomInOn = (Boolean) map.get("rotate_clockwise");
-		boolean zoomOutOn = (Boolean) map.get("rotate_counterclockwise");
+		// boolean zoomInOn = (Boolean) map.get("rotate_clockwise");
+		// boolean zoomOutOn = (Boolean) map.get("rotate_counterclockwise");
 		boolean swipeLeft = (Boolean) map.get("swipe_left");
 		boolean swipeRight = (Boolean) map.get("swipe_right");
 		Map<Integer, Object> zoomIn = (Map<Integer, Object>) map.get("zoom_in");
 		Map<Integer, Object> zoomOut = (Map<Integer, Object>) map
 				.get("zoom_out");
 
-		// boolean zoomInOn = (Boolean) zoomIn.get("Boolean");
+		boolean zoomInOn = (Boolean) zoomIn.get("Boolean");
 		// Integer zoomInDistance = (int) zoomIn.get("Dist");
-		// boolean zoomOutOn = (Boolean) zoomOut.get("Boolean");
+		boolean zoomOutOn = (Boolean) zoomOut.get("Boolean");
 		// Integer zoomOutDistance = (int) zoomOut.get("Dist");
 
 		if (swipeLeft) {

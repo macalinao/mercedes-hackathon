@@ -49,13 +49,13 @@ public class AirTouchEmulator {
 	public static void zoomOutCentered(int magnitude, int duration) {
 		int ax0 = CENTER_X;
 		int ay0 = CENTER_Y;
-		int ax1 = CENTER_X - magnitude - 50;
-		int ay1 = CENTER_Y - magnitude - 50;
+		int ax1 = CENTER_X - magnitude;
+		int ay1 = CENTER_Y - magnitude;
 
 		int bx0 = CENTER_X;
 		int by0 = CENTER_Y;
-		int bx1 = CENTER_X + magnitude + 50;
-		int by1 = CENTER_Y + magnitude + 50;
+		int bx1 = CENTER_X + magnitude;
+		int by1 = CENTER_Y + magnitude;
 
 		sendCommand("pinch(%d, %d, %d, %d, %d, %d, %d, %d, %d, %d)", ax1, ay1,
 				bx1, by1, ax0, ay0, bx0, by0, 1, duration);
