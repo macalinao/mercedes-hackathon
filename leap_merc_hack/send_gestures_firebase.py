@@ -53,7 +53,7 @@ class SendGestures:
             count = count+1
             self.gesture_data = {'swipe_right': False,'swipe_left' : False,
                                  'rotate_clockwise': False,'rotate_counterclockwise' : False,
-                                 'zoom_in' : {'Boolean': False,'Dist': 0} , 'zoom_out': {'Boolean':False, 'Dist': 0},'pinch': False,
+                                 'zoom_in' : {'Boolean': False,'Dist': 0} , 'zoom_out': {'Boolean':False, 'Dist': 0},'pinch': False, 'timestamp' : time.asctime() , 
                                 }
             data_all_false = self.gesture_data
             self.frame = self.controller.frame()
@@ -90,20 +90,12 @@ class SendGestures:
                 finger_list = hand.fingers.extended()
                 # Check if the zoom gesture exists in the current frame
                 if len(finger_list)==2 and finger_list[0].type==0 and finger_list[1].type==1:
-                    index_finger = finger_list[1]
-                    # If flag is false, start the zooming gesture, record current pos as origin
-                    if self.zoom_flag == False:
-                        self.zoom_flag = True
-                        self.zoom_origin = hand.palm_position[1]
-                    # zooming active if flag is true
+                    if (finger_list[0].direction[0] > 0.0): #y cord of direction of thumb
+                        self.gesture_data['zoom_out']['Boolean'] = True
+                    elif (finger_list[0].direction[0] < 0.0):
+                        self.gesture_data['zoom_in']['Boolean'] = True
                     else:
-                        zoom_movement = hand.palm_position[1] - self.zoom_origin
-                        if zoom_movement > 60:  
-                            self.gesture_data['zoom_out']['Boolean'] = True
-                            self.gesture_data['zoom_out']['Dist'] = abs(zoom_movement)
-                        if zoom_movement < -60: 
-                            self.gesture_data['zoom_in']['Boolean'] = True
-                            self.gesture_data['zoom_in']['Dist'] = abs(zoom_movement)
+                        self.log.warn("Thumbs is not positive or negative direction")
 
                 # If there's no zoom gesture in the view, set the flag back to false
                 else:

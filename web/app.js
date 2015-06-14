@@ -1,5 +1,6 @@
 import express from 'express';
 import request from 'superagent-bluebird-promise';
+import spotify from 'spotify-node-applescript';
 
 let app = express();
 
@@ -30,6 +31,12 @@ app.get('/data', (req, res) => {
 
 app.get('/latest', (req, res) => {
   res.json(data[data.length - 1]);
+});
+
+app.get('/song', (req, res) => {
+  spotify.getTrack((err, track) => {
+    res.json(track);
+  });
 });
 
 let port = process.env.PORT || 3000;
