@@ -38,7 +38,7 @@ class SendGestures:
         """setting up the logger"""
         self.log = logging.getLogger("gestures_sent_log")
         hdlr =logging.FileHandler('gestures_sent.log')
-        formatter = logging.Formatter('%(asctime)s - %(funcName)s- %(message)s')
+        formatter = logging.Formatter('%(message)s')
         hdlr.setFormatter(formatter)
         self.log.addHandler(hdlr) 
         self.log.setLevel(logging.INFO)
@@ -52,7 +52,6 @@ class SendGestures:
         while True:
             count = count+1
             self.gesture_data = {'swipe_right': False,'swipe_left' : False,
-                                 'rotate_clockwise': False,'rotate_counterclockwise' : False,
                                  'zoom_in' : {'Boolean': False,'Dist': 0} , 'zoom_out': {'Boolean':False, 'Dist': 0},'pinch': False, 'timestamp' : time.asctime() , 
                                 }
             data_all_false = self.gesture_data
@@ -109,7 +108,7 @@ class SendGestures:
             self.log.info("before logic data:" +  str(self.gesture_data))
 
             if data_previous == self.gesture_data:
-                if (self.gesture_data['zoom_in']['Boolean'] or self.gesture_data['zoom_out']['Boolean'] or self.gesture_data['rotate_clockwise'] or self.gesture_data['rotate_counterclockwise']):
+                if (self.gesture_data['zoom_in']['Boolean'] or self.gesture_data['zoom_out']['Boolean']):
                     snapshot = self.firebase.put('/Datafrompc','leapdata' ,self.gesture_data)
                     self.log.info('Aafter logic data:'+str(self.gesture_data))
                 else:
