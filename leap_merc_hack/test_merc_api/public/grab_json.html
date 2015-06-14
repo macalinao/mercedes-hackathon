@@ -14,16 +14,20 @@
         var pedal = [];
         var chart = new CanvasJS.Chart('chartContainer', {
           title: {
-            text: 'Data'
+            text: 'Fuel Usage'
           },
           data: [{
             type: 'line',
             dataPoints: fuel,
-            color: 'red'
+            color: 'red',
+            showInLegend: true,
+            legendName: 'Fuel Consumption'
           }, {
             type: 'line',
             dataPoints: pedal,
-            color: 'blue'
+            color: 'blue',
+            showInLegend: true,
+            legendName: 'Accelerator Pedal'
           }]
         });
 
