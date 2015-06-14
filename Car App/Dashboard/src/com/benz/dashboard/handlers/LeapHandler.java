@@ -18,7 +18,6 @@ public class LeapHandler extends BaseHandler {
 
 	public LeapHandler(FireBaseService svc) {
 		super(svc);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
