@@ -13,6 +13,7 @@
     "babel": "^5.5.8",
     "bluebird": "^2.9.27",
     "express": "^4.12.4",
+    "spotify-node-applescript": "^0.2.2",
     "superagent": "^1.2.0",
     "superagent-bluebird-promise": "^2.0.2"
   }
