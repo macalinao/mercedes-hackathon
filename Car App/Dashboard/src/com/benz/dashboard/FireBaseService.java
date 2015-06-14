@@ -89,4 +89,16 @@ public class FireBaseService extends IntentService {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public boolean onUnbind(Intent intent) {
+		return super.onUnbind(intent);
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		
+		BrightNess.getInstance(this).setSystemBrightness(-1);
+	}
 }

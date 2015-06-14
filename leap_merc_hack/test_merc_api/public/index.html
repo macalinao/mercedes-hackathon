@@ -10,21 +10,31 @@
     <script type='text/javascript' src='http://canvasjs.com/assets/script/canvasjs.min.js'></script>
     <script>
       $(function() {
-        var dps = []; // dataPoints
+        var fuel = [];
+        var pedal = [];
         var chart = new CanvasJS.Chart('chartContainer', {
           title: {
-            text: 'Data'
+            text: 'Fuel Usage'
           },
           data: [{
             type: 'line',
-            dataPoints: dps
+            dataPoints: fuel,
+            color: 'red',
+            showInLegend: true,
+            legendName: 'Fuel Consumption'
+          }, {
+            type: 'line',
+            dataPoints: pedal,
+            color: 'blue',
+            showInLegend: true,
+            legendName: 'Accelerator Pedal'
           }]
         });
 
         var xVal = 0;
         var yVal = 100;
         var updateInterval = 20;
-        var dataLength = 500; // number of dataPoints visible at any point
+        var dataLength = 1000; // number of dataPoints visible at any point
 
         var updateChart = function(count) {
           count = count || 1;
@@ -32,14 +42,14 @@
 
           for (var j = 0; j < count; j++) {
             yVal = yVal + Math.round(5 + Math.random() * (-5 - 5));
-            dps.push({
+            fuel.push({
               x: xVal,
               y: yVal
             });
             xVal++;
           };
-          if (dps.length > dataLength) {
-            dps.shift();
+          if (fuel.length > dataLength) {
+            fuel.shift();
           }
 
           chart.render();
@@ -62,12 +72,20 @@
         });
 
         function pushData(point) {
-          dps.push({
-            x: counter++,
+          pedal.push({
+            x: counter,
             y: point.Accelerator_Pedal
           });
-          if (dps.length > dataLength) {
-            dps.shift();
+          fuel.push({
+            x: counter,
+            y: point.Fuel_Consumption
+          });
+          counter++;
+          if (fuel.length > dataLength) {
+            fuel.shift();
+          }
+          if (pedal.length > dataLength) {
+            pedal.shift();
           }
         }
 
