@@ -24,6 +24,10 @@ setInterval(function() {
 
 app.use(express.static(__dirname + '/public'));
 
+app.get('/data', (req, res) => {
+  res.json(data);
+});
+
 let port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Listening on ${port}`);
