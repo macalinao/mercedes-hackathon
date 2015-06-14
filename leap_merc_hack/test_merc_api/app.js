@@ -12,6 +12,16 @@ data.pushSafe = function(e) {
   }
 };
 
+setInterval(function() {
+  request.get('http://172.31.99.2/vehicle').then((res) => {
+    data.pushSafe(res);
+  });
+}, 100);
+
+setInterval(function() {
+  console.log('Data is of length ' + data.length);
+}, 4000);
+
 app.use(express.static(__dirname + '/public'));
 
 let port = process.env.PORT || 3000;
