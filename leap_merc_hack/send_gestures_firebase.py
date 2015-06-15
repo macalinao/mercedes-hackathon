@@ -38,7 +38,7 @@ class SendGestures:
         """setting up the logger"""
         self.log = logging.getLogger("gestures_sent_log")
         hdlr =logging.FileHandler('gestures_sent.log')
-        formatter = logging.Formatter('%(asctime)s - %(funcName)s- %(message)s')
+        formatter = logging.Formatter('%(message)s')
         hdlr.setFormatter(formatter)
         self.log.addHandler(hdlr) 
         self.log.setLevel(logging.INFO)
@@ -52,8 +52,7 @@ class SendGestures:
         while True:
             count = count+1
             self.gesture_data = {'swipe_right': False,'swipe_left' : False,
-                                 'rotate_clockwise': False,'rotate_counterclockwise' : False,
-                                 'zoom_in' : {'Boolean': False,'Dist': 0} , 'zoom_out': {'Boolean':False, 'Dist': 0},'pinch': False, 'timestamp' : time.asctime() , 
+                                 'zoom_in' : {'Boolean': False,'Dist': 0} , 'zoom_out': {'Boolean':False, 'Dist': 0},'pinch': False, 'timestamp' : time.asctime() , 'swipe_real_left' : False , 'swipe_real_right' : False,
                                 }
             data_all_false = self.gesture_data
             self.frame = self.controller.frame()
@@ -67,19 +66,19 @@ class SendGestures:
                     if right_hand_exist and len(hand.fingers.extended()) == 1:
                         circle = Leap.CircleGesture(gesture)
                         if (circle.pointable.direction.angle_to(circle.normal) <= Leap.PI/2):
-                            self.gesture_data['rotate_clockwise'] = True
+                            self.gesture_data['swipe_left'] = True
                             clockwiseness = "clockwise"
                         else:
                             clockwiseness = "counterclockwise"  
-                            self.gesture_data['rotate_counterclockwise'] = True
+                            self.gesture_data['swipe_right'] = True
 
                 # Swipe gesture
                 if gesture.type == gesture.TYPE_SWIPE:
                     swipe = Leap.SwipeGesture(gesture)
                     if swipe.direction[0] > 0:
-                        self.gesture_data['swipe_right'] = True
+                        self.gesture_data['swipe_real_right'] = True
                     else:
-                        self.gesture_data['swipe_left'] = True
+                        self.gesture_data['swipe_real_left'] = True
             # Custom gestures
             right_hand_exist = False
             for h in hand_list:
@@ -100,7 +99,7 @@ class SendGestures:
                 # If there's no zoom gesture in the view, set the flag back to false
                 else:
                     self.zoom_flag = False
-                if hand.pinch_strength == 1:
+                if ((hand.pinch_strength == 1) and  ((self.gesture_data['swipe_real_right'] == True) or (self.gesture_data['swipe_real_left'] == True))):
                     self.gesture_data['pinch'] = True
 
             elif len(hand_list) !=0:
@@ -109,7 +108,7 @@ class SendGestures:
             self.log.info("before logic data:" +  str(self.gesture_data))
 
             if data_previous == self.gesture_data:
-                if (self.gesture_data['zoom_in']['Boolean'] or self.gesture_data['zoom_out']['Boolean'] or self.gesture_data['rotate_clockwise'] or self.gesture_data['rotate_counterclockwise']):
+                if (self.gesture_data['zoom_in']['Boolean'] or self.gesture_data['zoom_out']['Boolean']):
                     snapshot = self.firebase.put('/Datafrompc','leapdata' ,self.gesture_data)
                     self.log.info('Aafter logic data:'+str(self.gesture_data))
                 else:
