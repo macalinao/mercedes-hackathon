@@ -20,15 +20,16 @@ public class BrightNess {
 		return instance;
 	}
 
-	public static final int BLACK_SCREEN = -1;
+	public static final int BLACK_SCREEN = 0;
 	public static final int DEFAULT_BRIGHTNESS = 128;
 	public static final int MAX_BRIGHT = 255;
 
 	public void setSystemBrightness(int value) {
-		if(value <= -1) value = DEFAULT_BRIGHTNESS;
+		if (value < -1)
+			value = DEFAULT_BRIGHTNESS;
 		android.provider.Settings.System.putInt(ctx.getContentResolver(),
 				android.provider.Settings.System.SCREEN_BRIGHTNESS, value);
-		
+
 	}
 
 	public void changeAppBrightness(Context context, int brightness) {

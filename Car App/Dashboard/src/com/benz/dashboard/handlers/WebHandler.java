@@ -34,6 +34,9 @@ public class WebHandler extends BaseHandler {
 		if (url.toLowerCase().contains("youtube")) {
 			BrightNess instance = BrightNess.getInstance(svc);
 			instance.setSystemBrightness(BrightNess.BLACK_SCREEN);
+		} else {
+			BrightNess instance = BrightNess.getInstance(svc);
+			instance.setSystemBrightness(BrightNess.MAX_BRIGHT);
 		}
 	}
 
